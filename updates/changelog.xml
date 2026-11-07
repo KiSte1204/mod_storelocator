@@ -3,6 +3,15 @@
     <changelog>
         <element>pkg_lwstorelocator</element>
         <type>package</type>
+        <version>2.0.1</version>
+        <change>
+            <item>Package name matches the listing in the Joomla Extensions Directory again.</item>
+            <item>Code cleanup for the JED Checker (admin menu name, byte order mark).</item>
+        </change>
+    </changelog>
+    <changelog>
+        <element>pkg_lwstorelocator</element>
+        <type>package</type>
         <version>2.0.0</version>
         <addition>
             <item>New backend component to manage locations: create, edit, publish, search and filter.</item>
