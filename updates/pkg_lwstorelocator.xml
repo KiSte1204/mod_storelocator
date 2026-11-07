@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <updates>
     <update>
-        <name>Lightweight Store Locator (Leaflet &amp; OSM)</name>
+        <name>Lightweight Store Locator</name>
         <description>Lightweight Store Locator – store locator with Leaflet and OpenStreetMap</description>
         <element>pkg_lwstorelocator</element>
         <type>package</type>
@@ -10,7 +10,7 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/KiSte1204/mod_storelocator/releases/download/v2.0.0/pkg_lwstorelocator-2.0.0.zip</downloadurl>
         </downloads>
-        <sha256>d967a28fb16774b4a12d7670e1fc64fad10b5e77bdc14b6a61eae4f199dffd2a</sha256>
+        <sha256>f6f3a470e7c04582935a71957c770eb49aa32b138d8a7665898e5b577089dba9</sha256>
         <tags>
             <tag>stable</tag>
         </tags>

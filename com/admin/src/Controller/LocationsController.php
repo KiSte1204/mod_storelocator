@@ -127,7 +127,7 @@ class LocationsController extends AdminController
         )->loadAssocList() ?: [];
 
         $out = fopen('php://temp', 'r+');
-        fwrite($out, "\xEF\xBB\xBF");
+        fwrite($out, "\u{FEFF}"); // UTF-8 byte order mark for Excel
         fputcsv($out, ['external_id', 'name', 'address', 'postal', 'town', 'country', 'phone', 'email', 'website', 'latitude', 'longitude', 'published'], ';', '"', '');
 
         foreach ($rows as $row) {

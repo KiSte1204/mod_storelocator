@@ -175,9 +175,10 @@ class Importer
             throw new \RuntimeException(Text::sprintf('COM_LWSTORELOCATOR_IMPORT_ERROR_FILE', basename($file)));
         }
 
-        if (str_starts_with($raw, "\xEF\xBB\xBF")) {
+        // Byte order marks: UTF-8, UTF-16 LE, UTF-16 BE
+        if (str_starts_with($raw, "\u{FEFF}")) {
             $raw = substr($raw, 3);
-        } elseif (str_starts_with($raw, "\xFF\xFE") || str_starts_with($raw, "\xFE\xFF")) {
+        } elseif (str_starts_with($raw, \chr(255) . \chr(254)) || str_starts_with($raw, \chr(254) . \chr(255))) {
             $raw = mb_convert_encoding($raw, 'UTF-8', 'UTF-16');
         }
 
