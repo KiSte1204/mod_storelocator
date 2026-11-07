@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field name="search" type="text" inputmode="search" label="COM_LWSTORELOCATOR_FILTER_SEARCH_LABEL" description="COM_LWSTORELOCATOR_FILTER_SEARCH_DESC" hint="JSEARCH_FILTER"/>
+        <field name="published" type="status" label="JOPTION_SELECT_PUBLISHED" optionsFilter="0,1" onchange="this.form.submit();">
+            <option value="">JOPTION_SELECT_PUBLISHED</option>
+        </field>
+        <field name="geocode_status" type="list" label="COM_LWSTORELOCATOR_FIELD_GEOCODE_STATUS_LABEL" onchange="this.form.submit();">
+            <option value="">COM_LWSTORELOCATOR_FILTER_GEOCODE_SELECT</option>
+            <option value="0">COM_LWSTORELOCATOR_GEO_OPEN</option>
+            <option value="1">COM_LWSTORELOCATOR_GEO_EXACT</option>
+            <option value="2">COM_LWSTORELOCATOR_GEO_APPROX</option>
+            <option value="3">COM_LWSTORELOCATOR_GEO_FAILED</option>
+            <option value="4">COM_LWSTORELOCATOR_GEO_MANUAL</option>
+        </field>
+        <field name="country" type="list" label="COM_LWSTORELOCATOR_FIELD_COUNTRY_LABEL" onchange="this.form.submit();">
+            <option value="">COM_LWSTORELOCATOR_FILTER_COUNTRY_SELECT</option>
+        </field>
+    </fields>
+    <fields name="list">
+        <field name="fullordering" type="list" label="JGLOBAL_SORT_BY" default="a.name ASC" onchange="this.form.submit();" validate="options">
+            <option value="">JGLOBAL_SORT_BY</option>
+            <option value="a.name ASC">COM_LWSTORELOCATOR_SORT_NAME_ASC</option>
+            <option value="a.name DESC">COM_LWSTORELOCATOR_SORT_NAME_DESC</option>
+            <option value="a.town ASC">COM_LWSTORELOCATOR_SORT_TOWN_ASC</option>
+            <option value="a.town DESC">COM_LWSTORELOCATOR_SORT_TOWN_DESC</option>
+            <option value="a.country ASC">COM_LWSTORELOCATOR_SORT_COUNTRY_ASC</option>
+            <option value="a.geocode_status ASC">COM_LWSTORELOCATOR_SORT_GEOCODE_ASC</option>
+            <option value="a.published DESC">JSTATUS_DESC</option>
+            <option value="a.modified DESC">COM_LWSTORELOCATOR_SORT_MODIFIED_DESC</option>
+            <option value="a.id ASC">JGRID_HEADING_ID_ASC</option>
+            <option value="a.id DESC">JGRID_HEADING_ID_DESC</option>
+        </field>
+        <field name="limit" type="limitbox" label="JGLOBAL_LIST_LIMIT" default="25" onchange="this.form.submit();"/>
+    </fields>
+</form>

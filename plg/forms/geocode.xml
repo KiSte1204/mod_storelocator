@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="params">
+        <fieldset name="task_params">
+            <field name="limit" type="number" default="50" min="1" max="500" filter="integer" label="PLG_TASK_LWSTORELOCATOR_FIELD_LIMIT_LABEL" description="PLG_TASK_LWSTORELOCATOR_FIELD_LIMIT_DESC"/>
+            <field name="seconds" type="number" default="50" min="10" max="600" filter="integer" label="PLG_TASK_LWSTORELOCATOR_FIELD_SECONDS_LABEL" description="PLG_TASK_LWSTORELOCATOR_FIELD_SECONDS_DESC"/>
+        </fieldset>
+    </fields>
+</form>

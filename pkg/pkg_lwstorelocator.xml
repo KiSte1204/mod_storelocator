@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" method="upgrade">
+    <name>PKG_LWSTORELOCATOR</name>
+    <packagename>lwstorelocator</packagename>
+    <author>Stefan Kirchhoff</author>
+    <authorUrl>https://www.webkiste.net/</authorUrl>
+    <packager>Stefan Kirchhoff</packager>
+    <packagerurl>https://www.webkiste.net/</packagerurl>
+    <creationDate>2026-11</creationDate>
+    <copyright>(C) 2026 Stefan Kirchhoff, webkiste.net</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <version>2.0.0</version>
+    <description>PKG_LWSTORELOCATOR_XML_DESCRIPTION</description>
+    <blockChildUninstall>true</blockChildUninstall>
+    <scriptfile>script.php</scriptfile>
+
+    <files folder="packages">
+        <file type="component" id="com_lwstorelocator">com_lwstorelocator.zip</file>
+        <file type="module" id="mod_lwstorelocator" client="site">mod_lwstorelocator.zip</file>
+        <file type="plugin" id="lwstorelocator" group="task">plg_task_lwstorelocator.zip</file>
+    </files>
+
+    <languages folder="language">
+        <language tag="en-GB">en-GB/pkg_lwstorelocator.sys.ini</language>
+        <language tag="de-DE">de-DE/pkg_lwstorelocator.sys.ini</language>
+    </languages>
+
+    <changelogurl>https://raw.githubusercontent.com/KiSte1204/mod_storelocator/main/updates/changelog.xml</changelogurl>
+
+    <updateservers>
+        <server type="extension" priority="1" name="Lightweight Store Locator">https://raw.githubusercontent.com/KiSte1204/mod_storelocator/main/updates/pkg_lwstorelocator.xml</server>
+    </updateservers>
+</extension>

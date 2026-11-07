@@ -1,0 +1,23 @@
+﻿external_id;name;address;postal;town;country;phone;website;latitude;longitude;published
+DEMO-001;Sample Tools Berlin;Musterstraße 1;10115;Berlin;DE;+49 30 0000001;https://berlin.example.com;52.5320;13.3849;1
+DEMO-002;Sample Tools Hamburg;Musterweg 2;20095;Hamburg;DE;+49 40 0000002;https://hamburg.example.com;53.5511;9.9937;1
+DEMO-003;Sample Tools München;Beispielplatz 3;80331;München;DE;+49 89 0000003;https://muenchen.example.com;48.1374;11.5755;1
+DEMO-004;Sample Tools Köln;Musterallee 4;50667;Köln;DE;+49 221 0000004;;50.9375;6.9603;1
+DEMO-005;Sample Tools Frankfurt;Musterstraße 5;60311;Frankfurt am Main;Deutschland;+49 69 0000005;https://frankfurt.example.com;50.1109;8.6821;1
+DEMO-006;Sample Tools Stuttgart;Beispielweg 6;70173;Stuttgart;DE;+49 711 0000006;;48.7758;9.1829;1
+DEMO-007;Sample Tools Düsseldorf;Musterring 7;40213;Düsseldorf;DE;+49 211 0000007;https://duesseldorf.example.com;51.2277;6.7735;1
+DEMO-008;Sample Tools Leipzig;Musterstraße 8;04109;Leipzig;DE;+49 341 0000008;;51.3397;12.3731;1
+DEMO-009;Sample Tools Dortmund;Beispielstraße 9;44135;Dortmund;DE;+49 231 0000009;;51.5136;7.4653;1
+DEMO-010;Sample Tools Bremen;Musterweg 10;28195;Bremen;DE;+49 421 0000010;https://bremen.example.com;53.0793;8.8017;1
+DEMO-011;Sample Tools Hannover;Musterplatz 11;30159;Hannover;DE;+49 511 0000011;;52.3759;9.7320;1
+DEMO-012;Sample Tools Nürnberg;Beispielgasse 12;90403;Nürnberg;DE;+49 911 0000012;;49.4521;11.0767;1
+DEMO-013;Sample Tools Dresden;Musterstraße 13;01067;Dresden;DE;+49 351 0000013;https://dresden.example.com;51.0504;13.7373;1
+DEMO-014;Sample Tools Wien;Mustergasse 14;1010;Wien;Österreich;+43 1 0000014;https://wien.example.com;48.2082;16.3738;1
+DEMO-015;Sample Tools Graz;Beispielweg 15;8010;Graz;AT;+43 316 0000015;;47.0707;15.4395;1
+DEMO-016;Sample Tools Zürich;Musterstrasse 16;8001;Zürich;Schweiz;+41 44 0000016;https://zuerich.example.com;47.3769;8.5417;1
+DEMO-017;Sample Tools Basel;Beispielgasse 17;4051;Basel;CH;+41 61 0000017;;47.5596;7.5886;1
+DEMO-018;Sample Tools Amsterdam;Voorbeeldstraat 18;1012 AB;Amsterdam;NL;+31 20 0000018;https://amsterdam.example.com;52.3676;4.9041;1
+DEMO-019;Sample Tools Brussels;Rue Exemple 19;1000;Bruxelles;Belgium;+32 2 0000019;;50.8503;4.3517;1
+DEMO-020;Sample Tools Freiburg;Musterstraße 20;79098;Freiburg im Breisgau;DE;+49 761 0000020;;;;1
+DEMO-021;Sample Tools Münster;Beispielweg 21;48143;Münster;DE;+49 251 0000021;https://muenster.example.com;;;1
+DEMO-022;Sample Tools Linz;Mustergasse 22;4020;Linz;AT;+43 732 0000022;;;;1

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <fieldset name="geocoding" label="COM_LWSTORELOCATOR_CONFIG_GEOCODING" description="COM_LWSTORELOCATOR_CONFIG_GEOCODING_DESC">
+        <field name="contact_email" type="email" label="COM_LWSTORELOCATOR_CONFIG_EMAIL_LABEL" description="COM_LWSTORELOCATOR_CONFIG_EMAIL_DESC" validate="email" filter="string"/>
+        <field name="default_country" type="text" label="COM_LWSTORELOCATOR_CONFIG_COUNTRY_LABEL" description="COM_LWSTORELOCATOR_CONFIG_COUNTRY_DESC" maxlength="2" hint="DE" filter="word"/>
+        <field name="geocode_batch" type="number" label="COM_LWSTORELOCATOR_CONFIG_BATCH_LABEL" description="COM_LWSTORELOCATOR_CONFIG_BATCH_DESC" default="5" min="1" max="20" filter="integer"/>
+    </fieldset>
+    <fieldset name="import" label="COM_LWSTORELOCATOR_CONFIG_IMPORT">
+        <field name="import_published" type="radio" layout="joomla.form.field.radio.switcher" label="COM_LWSTORELOCATOR_CONFIG_IMPORT_PUBLISHED_LABEL" description="COM_LWSTORELOCATOR_CONFIG_IMPORT_PUBLISHED_DESC" default="1">
+            <option value="0">JNO</option>
+            <option value="1">JYES</option>
+        </field>
+    </fieldset>
+    <fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+        <field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" validate="rules" filter="rules" component="com_lwstorelocator" section="component"/>
+    </fieldset>
+</config>

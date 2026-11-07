@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelogs>
+    <changelog>
+        <element>pkg_lwstorelocator</element>
+        <type>package</type>
+        <version>2.0.0</version>
+        <addition>
+            <item>New backend component to manage locations: create, edit, publish, search and filter.</item>
+            <item>CSV/XLSX import with preview, automatic column detection, matching by external ID and safety limit for removals.</item>
+            <item>Geocoding with OpenStreetMap Nominatim in several stages (exact to approximate), at the click of a button or as a scheduled task.</item>
+            <item>Scheduled tasks for importing a file from the server and for geocoding.</item>
+            <item>Module settings for colours, map height, tile server, directions provider and country filter.</item>
+            <item>Sample file with fictitious locations.</item>
+        </addition>
+        <change>
+            <item>Module rebuilt for Joomla 5 and 6 with its own database table, language files and assets.</item>
+        </change>
+    </changelog>
+</changelogs>

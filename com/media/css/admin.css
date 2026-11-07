@@ -1,0 +1,14 @@
+/* Lightweight Store Locator – backend (C) 2026 Stefan Kirchhoff, webkiste.net – GPL-2.0-or-later */
+.lwsl-geocode-log {
+  max-height: 14rem;
+  overflow: auto;
+  white-space: pre-wrap;
+  background: var(--body-bg, #f8f9fa);
+  border: 1px solid var(--border-color, #dee2e6);
+  border-radius: .25rem;
+  padding: .5rem;
+}
+.lwsl-geocode-log:empty { display: none; }
+.lwsl-import-table td, .lwsl-import-table th { vertical-align: top; }
+.lwsl-import-details { margin: .25rem 0 0; padding-left: 1rem; font-size: .85em; color: var(--gray-700, #555); }
+.lwsl-sample code { white-space: nowrap; }

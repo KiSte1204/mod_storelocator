@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" method="upgrade">
+    <name>COM_LWSTORELOCATOR</name>
+    <author>Stefan Kirchhoff</author>
+    <authorUrl>https://www.webkiste.net/</authorUrl>
+    <creationDate>2026-11</creationDate>
+    <copyright>(C) 2026 Stefan Kirchhoff, webkiste.net</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <version>2.0.0</version>
+    <description>COM_LWSTORELOCATOR_XML_DESCRIPTION</description>
+    <namespace path="src">Webkiste\Component\LwStoreLocator</namespace>
+
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <uninstall>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+    <update>
+        <schemas>
+            <schemapath type="mysql">sql/updates/mysql</schemapath>
+        </schemas>
+    </update>
+
+    <media destination="com_lwstorelocator" folder="media">
+        <folder>js</folder>
+        <folder>css</folder>
+        <folder>sample</folder>
+    </media>
+
+    <administration>
+        <menu img="class:map-marker-alt">COM_LWSTORELOCATOR_MENU</menu>
+        <files folder="admin">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <folder>forms</folder>
+            <folder>language</folder>
+            <folder>services</folder>
+            <folder>sql</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+        </files>
+    </administration>
+</extension>

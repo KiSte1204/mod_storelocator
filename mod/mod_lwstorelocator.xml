@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" client="site" method="upgrade">
+    <name>MOD_LWSTORELOCATOR</name>
+    <author>Stefan Kirchhoff</author>
+    <authorUrl>https://www.webkiste.net/</authorUrl>
+    <creationDate>2026-11</creationDate>
+    <copyright>(C) 2026 Stefan Kirchhoff, webkiste.net</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <version>2.0.0</version>
+    <description>MOD_LWSTORELOCATOR_XML_DESCRIPTION</description>
+    <namespace path="src">Webkiste\Module\LwStoreLocator</namespace>
+
+    <files>
+        <folder module="mod_lwstorelocator">services</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+        <folder>language</folder>
+    </files>
+
+    <media destination="mod_lwstorelocator" folder="media">
+        <folder>css</folder>
+        <folder>js</folder>
+        <folder>leaflet</folder>
+    </media>
+
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field name="display_mode" type="list" default="full" label="MOD_LWSTORELOCATOR_FIELD_MODE_LABEL" description="MOD_LWSTORELOCATOR_FIELD_MODE_DESC" validate="options">
+                    <option value="full">MOD_LWSTORELOCATOR_MODE_FULL</option>
+                    <option value="compact">MOD_LWSTORELOCATOR_MODE_COMPACT</option>
+                </field>
+                <field name="target_itemid" type="menuitem" label="MOD_LWSTORELOCATOR_FIELD_TARGET_LABEL" description="MOD_LWSTORELOCATOR_FIELD_TARGET_DESC" showon="display_mode:compact">
+                    <option value="">JSELECT</option>
+                </field>
+                <field name="default_radius" type="list" default="25" label="MOD_LWSTORELOCATOR_FIELD_RADIUS_LABEL" description="MOD_LWSTORELOCATOR_FIELD_RADIUS_DESC" filter="integer" showon="display_mode:full">
+                    <option value="10">10 km</option>
+                    <option value="25">25 km</option>
+                    <option value="50">50 km</option>
+                    <option value="100">100 km</option>
+                    <option value="200">200 km</option>
+                </field>
+                <field name="search_countries" type="text" label="MOD_LWSTORELOCATOR_FIELD_COUNTRIES_LABEL" description="MOD_LWSTORELOCATOR_FIELD_COUNTRIES_DESC" hint="DE,AT,CH" showon="display_mode:full"/>
+                <field name="country_filter" type="radio" layout="joomla.form.field.radio.switcher" default="0" label="MOD_LWSTORELOCATOR_FIELD_COUNTRY_FILTER_LABEL" description="MOD_LWSTORELOCATOR_FIELD_COUNTRY_FILTER_DESC" showon="display_mode:full">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+            </fieldset>
+
+            <fieldset name="map" label="MOD_LWSTORELOCATOR_FIELDSET_MAP">
+                <field name="require_consent" type="radio" layout="joomla.form.field.radio.switcher" default="1" label="MOD_LWSTORELOCATOR_FIELD_CONSENT_LABEL" description="MOD_LWSTORELOCATOR_FIELD_CONSENT_DESC">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+                <field name="privacy_itemid" type="menuitem" label="MOD_LWSTORELOCATOR_FIELD_PRIVACY_LABEL" description="MOD_LWSTORELOCATOR_FIELD_PRIVACY_DESC" showon="require_consent:1">
+                    <option value="">JSELECT</option>
+                </field>
+                <field name="consent_text" type="textarea" rows="4" filter="safehtml" label="MOD_LWSTORELOCATOR_FIELD_CONSENT_TEXT_LABEL" description="MOD_LWSTORELOCATOR_FIELD_CONSENT_TEXT_DESC" showon="require_consent:1"/>
+                <field name="map_height" type="number" default="520" min="250" max="1200" step="10" filter="integer" label="MOD_LWSTORELOCATOR_FIELD_HEIGHT_LABEL"/>
+                <field name="directions" type="list" default="google" label="MOD_LWSTORELOCATOR_FIELD_DIRECTIONS_LABEL" description="MOD_LWSTORELOCATOR_FIELD_DIRECTIONS_DESC" validate="options">
+                    <option value="google">Google Maps</option>
+                    <option value="apple">Apple Maps</option>
+                    <option value="osm">OpenStreetMap</option>
+                    <option value="none">MOD_LWSTORELOCATOR_DIRECTIONS_NONE</option>
+                </field>
+                <field name="show_phone" type="radio" layout="joomla.form.field.radio.switcher" default="1" label="MOD_LWSTORELOCATOR_FIELD_SHOW_PHONE_LABEL">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+                <field name="show_website" type="radio" layout="joomla.form.field.radio.switcher" default="1" label="MOD_LWSTORELOCATOR_FIELD_SHOW_WEBSITE_LABEL">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+                <field name="tile_url" type="url" default="https://tile.openstreetmap.org/{z}/{x}/{y}.png" label="MOD_LWSTORELOCATOR_FIELD_TILES_LABEL" description="MOD_LWSTORELOCATOR_FIELD_TILES_DESC" filter="raw"/>
+                <field name="tile_attribution" type="text" default="&amp;copy; &lt;a href=&quot;https://www.openstreetmap.org/copyright&quot;&gt;OpenStreetMap&lt;/a&gt;" label="MOD_LWSTORELOCATOR_FIELD_ATTRIBUTION_LABEL" description="MOD_LWSTORELOCATOR_FIELD_ATTRIBUTION_DESC" filter="safehtml"/>
+            </fieldset>
+
+            <fieldset name="appearance" label="MOD_LWSTORELOCATOR_FIELDSET_APPEARANCE">
+                <field name="accent_color" type="color" default="#0066cc" label="MOD_LWSTORELOCATOR_FIELD_ACCENT_LABEL" description="MOD_LWSTORELOCATOR_FIELD_ACCENT_DESC"/>
+                <field name="secondary_color" type="color" default="#222222" label="MOD_LWSTORELOCATOR_FIELD_SECONDARY_LABEL" description="MOD_LWSTORELOCATOR_FIELD_SECONDARY_DESC"/>
+                <field name="marker_color" type="color" default="#d9534f" label="MOD_LWSTORELOCATOR_FIELD_MARKER_LABEL" description="MOD_LWSTORELOCATOR_FIELD_MARKER_DESC"/>
+            </fieldset>
+
+            <fieldset name="advanced">
+                <field name="layout" type="modulelayout" label="JFIELD_ALT_LAYOUT_LABEL" class="form-select" validate="moduleLayout"/>
+                <field name="moduleclass_sfx" type="textarea" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" rows="3" validate="CssIdentifier"/>
+                <field name="cache" type="list" default="1" label="COM_MODULES_FIELD_CACHING_LABEL" filter="integer" validate="options">
+                    <option value="1">JGLOBAL_USE_GLOBAL</option>
+                    <option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+                </field>
+                <field name="cache_time" type="number" default="900" label="COM_MODULES_FIELD_CACHE_TIME_LABEL" filter="integer"/>
+                <field name="cachemode" type="hidden" default="static">
+                    <option value="static"></option>
+                </field>
+            </fieldset>
+        </fields>
+    </config>
+</extension>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="params">
+        <fieldset name="task_params">
+            <field name="file" type="text" required="true" label="PLG_TASK_LWSTORELOCATOR_FIELD_FILE_LABEL" description="PLG_TASK_LWSTORELOCATOR_FIELD_FILE_DESC" hint="tmp/locations.csv" filter="string"/>
+            <field name="missing" type="list" default="keep" label="PLG_TASK_LWSTORELOCATOR_FIELD_MISSING_LABEL" description="PLG_TASK_LWSTORELOCATOR_FIELD_MISSING_DESC" validate="options">
+                <option value="keep">PLG_TASK_LWSTORELOCATOR_MISSING_KEEP</option>
+                <option value="unpublish">PLG_TASK_LWSTORELOCATOR_MISSING_UNPUBLISH</option>
+                <option value="delete">PLG_TASK_LWSTORELOCATOR_MISSING_DELETE</option>
+            </field>
+            <field name="blank_overwrites" type="radio" layout="joomla.form.field.radio.switcher" default="0" label="PLG_TASK_LWSTORELOCATOR_FIELD_BLANK_LABEL" filter="integer">
+                <option value="0">JNO</option>
+                <option value="1">JYES</option>
+            </field>
+            <field name="skip_incomplete" type="radio" layout="joomla.form.field.radio.switcher" default="0" label="PLG_TASK_LWSTORELOCATOR_FIELD_SKIP_LABEL" filter="integer">
+                <option value="0">JNO</option>
+                <option value="1">JYES</option>
+            </field>
+        </fieldset>
+    </fields>
+</form>

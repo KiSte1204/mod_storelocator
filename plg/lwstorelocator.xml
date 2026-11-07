@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="task" method="upgrade">
+    <name>PLG_TASK_LWSTORELOCATOR</name>
+    <author>Stefan Kirchhoff</author>
+    <authorUrl>https://www.webkiste.net/</authorUrl>
+    <creationDate>2026-11</creationDate>
+    <copyright>(C) 2026 Stefan Kirchhoff, webkiste.net</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <version>2.0.0</version>
+    <description>PLG_TASK_LWSTORELOCATOR_XML_DESCRIPTION</description>
+    <namespace path="src">Webkiste\Plugin\Task\LwStoreLocator</namespace>
+    <files>
+        <folder plugin="lwstorelocator">services</folder>
+        <folder>src</folder>
+        <folder>forms</folder>
+        <folder>language</folder>
+    </files>
+</extension>

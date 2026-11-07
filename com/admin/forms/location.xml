@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset name="location">
+        <field name="id" type="hidden" default="0" filter="integer"/>
+        <field name="name" type="text" label="COM_LWSTORELOCATOR_FIELD_NAME_LABEL" required="true" maxlength="255" class="input-xxlarge"/>
+        <field name="address" type="text" label="COM_LWSTORELOCATOR_FIELD_ADDRESS_LABEL" maxlength="255"/>
+        <field name="postal" type="text" label="COM_LWSTORELOCATOR_FIELD_POSTAL_LABEL" maxlength="20"/>
+        <field name="town" type="text" label="COM_LWSTORELOCATOR_FIELD_TOWN_LABEL" maxlength="100"/>
+        <field name="country" type="text" label="COM_LWSTORELOCATOR_FIELD_COUNTRY_LABEL" description="COM_LWSTORELOCATOR_FIELD_COUNTRY_DESC" maxlength="40" hint="DE"/>
+    </fieldset>
+    <fieldset name="contact">
+        <field name="phone" type="tel" label="COM_LWSTORELOCATOR_FIELD_PHONE_LABEL" maxlength="50"/>
+        <field name="email" type="email" label="COM_LWSTORELOCATOR_FIELD_EMAIL_LABEL" description="COM_LWSTORELOCATOR_FIELD_EMAIL_DESC" maxlength="255" validate="email"/>
+        <field name="website" type="url" label="COM_LWSTORELOCATOR_FIELD_WEBSITE_LABEL" maxlength="255" filter="url" validate="url" hint="https://"/>
+    </fieldset>
+    <fieldset name="coordinates">
+        <field name="latitude" type="text" label="COM_LWSTORELOCATOR_FIELD_LATITUDE_LABEL" hint="52.5200066" filter="string"/>
+        <field name="longitude" type="text" label="COM_LWSTORELOCATOR_FIELD_LONGITUDE_LABEL" hint="13.4049540" filter="string"/>
+    </fieldset>
+    <fieldset name="details">
+        <field name="published" type="list" label="JSTATUS" default="1" class="form-select-color-state" validate="options">
+            <option value="1">JPUBLISHED</option>
+            <option value="0">JUNPUBLISHED</option>
+        </field>
+        <field name="external_id" type="text" label="COM_LWSTORELOCATOR_FIELD_EXTERNAL_ID_LABEL" description="COM_LWSTORELOCATOR_FIELD_EXTERNAL_ID_DESC" maxlength="64"/>
+        <field name="created" type="calendar" label="JGLOBAL_FIELD_CREATED_LABEL" readonly="true" translateformat="true" showtime="true" filter="unset"/>
+        <field name="modified" type="calendar" label="JGLOBAL_FIELD_MODIFIED_LABEL" readonly="true" translateformat="true" showtime="true" filter="unset"/>
+    </fieldset>
+</form>
