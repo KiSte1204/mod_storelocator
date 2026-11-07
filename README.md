@@ -1,3 +1,5 @@
+![Lightweight Store Locator](assets/banner-1200x630.png)
+
 # Lightweight Store Locator (Leaflet & OSM) for Joomla
 
 A fast store locator for Joomla 5 and 6 – based on [Leaflet](https://leafletjs.com) and [OpenStreetMap](https://www.openstreetmap.org). No Google Maps API key, no API costs, no libraries from CDNs.
