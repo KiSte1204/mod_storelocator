@@ -9,7 +9,7 @@
     <creationDate>2026-11</creationDate>
     <copyright>(C) 2026 Stefan Kirchhoff, webkiste.net</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-    <version>2.0.2</version>
+    <version>2.0.3</version>
     <description>PKG_LWSTORELOCATOR_XML_DESCRIPTION</description>
     <blockChildUninstall>true</blockChildUninstall>
     <scriptfile>script.php</scriptfile>
