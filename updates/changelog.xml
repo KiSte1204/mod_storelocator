@@ -3,6 +3,18 @@
     <changelog>
         <element>pkg_lwstorelocator</element>
         <type>package</type>
+        <version>2.0.2</version>
+        <addition>
+            <item>If Nominatim throttles the server (HTTP 429, common on shared hosting), geocoding in the backend continues in the browser automatically.</item>
+            <item>The geocoding log shows the reason when Nominatim cannot be reached (e.g. HTTP 429).</item>
+        </addition>
+        <fix>
+            <item>The one-request-per-second limit and Nominatim's Retry-After are now respected across requests and scheduled tasks.</item>
+        </fix>
+    </changelog>
+    <changelog>
+        <element>pkg_lwstorelocator</element>
+        <type>package</type>
         <version>2.0.1</version>
         <change>
             <item>Package name matches the listing in the Joomla Extensions Directory again.</item>

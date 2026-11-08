@@ -82,6 +82,7 @@ For reliable runs use the Joomla CLI scheduler (`php cli/joomla.php scheduler:ru
 ### Fair use
 
 - **Nominatim:** please enter a contact email in the component options and respect the [usage policy](https://operations.osmfoundation.org/policies/nominatim/). The town search on the website also uses Nominatim.
+- **Shared hosting:** many sites share one IP there, so Nominatim may throttle the server (HTTP 429). Geocoding in the backend then continues automatically in your browser; the scheduled task tries again on its next run.
 - **Map tiles:** the OpenStreetMap tile server is fine for moderate traffic. For high traffic use your own or a commercial tile provider (module setting “Tile server”), see the [tile usage policy](https://operations.osmfoundation.org/policies/tiles/).
 
 ## Deutsche Kurzanleitung

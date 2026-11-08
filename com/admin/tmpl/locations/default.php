@@ -35,7 +35,10 @@ $wa->useScript('table.columns')->useScript('multiselect');
 $wa->registerAndUseScript('com_lwstorelocator.geocode', 'com_lwstorelocator/geocode.js', [], ['defer' => true], ['core']);
 $wa->registerAndUseStyle('com_lwstorelocator.admin', 'com_lwstorelocator/admin.css');
 
-$geocodeUrl = Route::_('index.php?option=com_lwstorelocator&task=locations.geocode&' . Session::getFormToken() . '=1', false);
+$token      = Session::getFormToken() . '=1';
+$geocodeUrl = Route::_('index.php?option=com_lwstorelocator&task=locations.geocode&' . $token, false);
+$planUrl    = Route::_('index.php?option=com_lwstorelocator&task=locations.geocodePlan&' . $token, false);
+$storeUrl   = Route::_('index.php?option=com_lwstorelocator&task=locations.geocodeStore&' . $token, false);
 
 $badges = [
     LocationTable::GEO_OPEN   => ['bg-secondary', 'COM_LWSTORELOCATOR_GEO_OPEN'],
@@ -50,6 +53,8 @@ Text::script('COM_LWSTORELOCATOR_GEOCODE_DONE');
 Text::script('COM_LWSTORELOCATOR_GEOCODE_PAUSED');
 Text::script('COM_LWSTORELOCATOR_GEOCODE_ERROR');
 Text::script('COM_LWSTORELOCATOR_GEOCODE_STOPPED');
+Text::script('COM_LWSTORELOCATOR_GEOCODE_BROWSER_MODE');
+Text::script('COM_LWSTORELOCATOR_GEOCODE_BROWSER_PAUSED');
 ?>
 <form action="<?php echo Route::_('index.php?option=com_lwstorelocator&view=locations'); ?>" method="post" name="adminForm" id="adminForm">
 
@@ -65,7 +70,7 @@ Text::script('COM_LWSTORELOCATOR_GEOCODE_STOPPED');
             </a>
         </div>
     <?php else : ?>
-        <div class="card mb-3 lwsl-geocode" id="lwsl-geocode" data-url="<?php echo $this->escape($geocodeUrl); ?>" data-open="<?php echo $open; ?>">
+        <div class="card mb-3 lwsl-geocode" id="lwsl-geocode" data-url="<?php echo $this->escape($geocodeUrl); ?>" data-plan-url="<?php echo $this->escape($planUrl); ?>" data-store-url="<?php echo $this->escape($storeUrl); ?>" data-open="<?php echo $open; ?>">
             <div class="card-body d-flex flex-wrap align-items-center gap-3">
                 <div class="flex-grow-1">
                     <strong><?php echo Text::_('COM_LWSTORELOCATOR_GEOCODE_TITLE'); ?></strong>

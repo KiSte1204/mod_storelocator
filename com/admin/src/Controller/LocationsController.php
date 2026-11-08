@@ -59,7 +59,9 @@ class LocationsController extends AdminController
         $geocoder = new Geocoder(
             Factory::getContainer()->get(DatabaseInterface::class),
             trim((string) $params->get('contact_email', '')),
-            strtoupper(trim((string) $params->get('default_country', '')))
+            strtoupper(trim((string) $params->get('default_country', ''))),
+            null,
+            Geocoder::defaultStateFile()
         );
 
         $result = $geocoder->run($limit, 20.0);
@@ -67,12 +69,94 @@ class LocationsController extends AdminController
         // Translate the log for the progress window
         $result['log'] = array_map(static function (array $entry): string {
             [$type, $id, $name, $stage] = $entry;
-            $stageText = $stage !== '' ? Text::_('COM_LWSTORELOCATOR_GEOCODE_STAGE_' . strtoupper($stage)) : '';
+            if ($type === 'error') {
+                // Technical detail (exception message or HTTP status), shown as is
+                $stageText = $stage !== '' ? $stage : '?';
+            } else {
+                $stageText = $stage !== '' ? Text::_('COM_LWSTORELOCATOR_GEOCODE_STAGE_' . strtoupper($stage)) : '';
+            }
 
             return Text::sprintf('COM_LWSTORELOCATOR_GEOCODE_LOG_' . strtoupper($type), $id, $name, $stageText);
         }, $result['log']);
 
         $this->sendJson($result);
+    }
+
+    /**
+     * Next open locations with their search stages for geocoding in the browser (AJAX, JSON).
+     * Used when Nominatim throttles the server, which is common on shared hosting.
+     */
+    public function geocodePlan(): void
+    {
+        $this->checkGeocodeAccess();
+
+        $params = ComponentHelper::getParams('com_lwstorelocator');
+        $geocoder = $this->createGeocoder();
+
+        $this->sendJson([
+            'endpoint'  => Geocoder::ENDPOINT,
+            'email'     => trim((string) $params->get('contact_email', '')),
+            'locations' => $geocoder->plan(10),
+            'remaining' => $geocoder->pendingCount(),
+        ]);
+    }
+
+    /**
+     * Stores one result found by the browser (AJAX, JSON).
+     */
+    public function geocodeStore(): void
+    {
+        $this->checkGeocodeAccess();
+
+        $input = $this->input;
+        $id    = $input->post->getInt('id');
+        $stage = $input->post->getCmd('stage', '');
+        $lat   = $input->post->getString('lat', '');
+        $lon   = $input->post->getString('lon', '');
+        $found = is_numeric($lat) && is_numeric($lon);
+
+        $geocoder = $this->createGeocoder();
+        $type     = $geocoder->store(
+            $id,
+            $found ? (float) $lat : null,
+            $found ? (float) $lon : null,
+            $found ? $stage : '',
+            $input->post->getInt('exact') === 1
+        );
+
+        $line = '';
+
+        if ($type !== '') {
+            $name      = $input->post->getString('name', '#' . $id);
+            $stageText = ($type !== 'failed' && $stage !== '') ? Text::_('COM_LWSTORELOCATOR_GEOCODE_STAGE_' . strtoupper($stage)) : '';
+            $line      = Text::sprintf('COM_LWSTORELOCATOR_GEOCODE_LOG_' . strtoupper($type), $id, $name, $stageText);
+        }
+
+        $this->sendJson(['type' => $type, 'log' => $line !== '' ? [$line] : [], 'remaining' => $geocoder->pendingCount()]);
+    }
+
+    private function checkGeocodeAccess(): void
+    {
+        if (!Session::checkToken('get') && !Session::checkToken()) {
+            $this->sendJson(null, Text::_('JINVALID_TOKEN'), true);
+        }
+
+        if (!$this->app->getIdentity()->authorise('core.edit', 'com_lwstorelocator')) {
+            $this->sendJson(null, Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'), true);
+        }
+    }
+
+    private function createGeocoder(): Geocoder
+    {
+        $params = ComponentHelper::getParams('com_lwstorelocator');
+
+        return new Geocoder(
+            Factory::getContainer()->get(DatabaseInterface::class),
+            trim((string) $params->get('contact_email', '')),
+            strtoupper(trim((string) $params->get('default_country', ''))),
+            null,
+            Geocoder::defaultStateFile()
+        );
     }
 
     /**

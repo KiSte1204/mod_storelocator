@@ -10,6 +10,7 @@
 
 namespace Webkiste\Component\LwStoreLocator\Administrator\Service;
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Http\HttpFactory;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Database\DatabaseInterface;
@@ -37,19 +38,96 @@ class Geocoder
     /** @var callable|null  Test hook: fn(array $params): array|false|null */
     private $lookup;
 
+    /** Reason of the last technical error (exception message or HTTP status) */
+    private string $lastError = '';
+
     /**
      * @param   DatabaseInterface  $db              Database
      * @param   string             $contactEmail    Contact address sent to Nominatim (recommended by the usage policy)
      * @param   string             $defaultCountry  ISO code used when a location has no country
      * @param   callable|null      $lookup          Replaces the HTTP request (for tests)
+     * @param   string             $stateFile       File that keeps the time of the last request and a
+     *                                              Retry-After block across PHP requests ('' = off)
      */
     public function __construct(
         private DatabaseInterface $db,
         private string $contactEmail = '',
         private string $defaultCountry = '',
-        ?callable $lookup = null
+        ?callable $lookup = null,
+        private string $stateFile = ''
     ) {
         $this->lookup = $lookup;
+    }
+
+    /**
+     * Default location of the shared throttle state (Joomla's tmp folder).
+     */
+    public static function defaultStateFile(): string
+    {
+        $tmp = (string) Factory::getApplication()->get('tmp_path', JPATH_ROOT . '/tmp');
+
+        return is_dir($tmp) && is_writable($tmp) ? rtrim($tmp, '/\\') . '/lwstorelocator_nominatim.json' : '';
+    }
+
+    /**
+     * Open locations with their search stages, so the browser can geocode them itself
+     * when the server is throttled by Nominatim (shared hosting IPs often are).
+     *
+     * @return  array<int, array{id:int, name:string, stages: array<int, array{key:string, params:array, exact:bool}>}>
+     */
+    public function plan(int $limit): array
+    {
+        $query = $this->db->getQuery(true)
+            ->select($this->db->quoteName(['id', 'name', 'address', 'postal', 'town', 'country']))
+            ->from($this->db->quoteName('#__lwstorelocator_locations'))
+            ->where($this->db->quoteName('geocode_status') . ' = ' . LocationTable::GEO_OPEN)
+            ->order($this->db->quoteName('id'));
+
+        $plan = [];
+
+        foreach ($this->db->setQuery($query, 0, max(1, $limit))->loadObjectList() ?: [] as $loc) {
+            $stages = [];
+
+            foreach ($this->stages((string) $loc->address, (string) $loc->postal, (string) $loc->town, (string) $loc->country) as $key => $def) {
+                $stages[] = ['key' => $key, 'params' => $def['params'], 'exact' => $def['exact']];
+            }
+
+            $plan[] = ['id' => (int) $loc->id, 'name' => (string) $loc->name, 'stages' => $stages];
+        }
+
+        return $plan;
+    }
+
+    /**
+     * Stores a result found by the browser.
+     *
+     * @return  string  Log type: exact, approx or failed ('' = location unknown or not open)
+     */
+    public function store(int $id, ?float $lat, ?float $lon, string $stage, bool $exact): string
+    {
+        $query = $this->db->getQuery(true)
+            ->select('COUNT(*)')
+            ->from($this->db->quoteName('#__lwstorelocator_locations'))
+            ->where($this->db->quoteName('id') . ' = :id')
+            ->where($this->db->quoteName('geocode_status') . ' = ' . LocationTable::GEO_OPEN)
+            ->bind(':id', $id, ParameterType::INTEGER);
+
+        if (!(int) $this->db->setQuery($query)->loadResult()) {
+            return '';
+        }
+
+        $valid = $lat !== null && $lon !== null && abs($lat) <= 90 && abs($lon) <= 180
+            && array_key_exists($stage, ['street_postal_town' => 1, 'free_text' => 1, 'street_town' => 1, 'postal_town' => 1, 'postal' => 1, 'town' => 1]);
+
+        if (!$valid) {
+            $this->save($id, null, null, LocationTable::GEO_FAILED, '');
+
+            return 'failed';
+        }
+
+        $this->save($id, $lat, $lon, $exact ? LocationTable::GEO_EXACT : LocationTable::GEO_APPROX, $stage);
+
+        return $exact ? 'exact' : 'approx';
     }
 
     /**
@@ -73,7 +151,7 @@ class Geocoder
     public function run(int $limit, float $maxSeconds = 20.0): array
     {
         $start  = microtime(true);
-        $result = ['processed' => 0, 'exact' => 0, 'approx' => 0, 'failed' => 0, 'remaining' => 0, 'aborted' => false, 'log' => []];
+        $result = ['processed' => 0, 'exact' => 0, 'approx' => 0, 'failed' => 0, 'remaining' => 0, 'aborted' => false, 'reason' => '', 'log' => []];
 
         $query = $this->db->getQuery(true)
             ->select($this->db->quoteName(['id', 'name', 'address', 'postal', 'town', 'country']))
@@ -94,7 +172,8 @@ class Geocoder
             if ($hit === false) {
                 // Technical problem (network, HTTP 429/5xx): keep the location open and stop the batch
                 $result['aborted'] = true;
-                $result['log'][]   = ['error', (int) $loc->id, (string) $loc->name, ''];
+                $result['reason']  = $this->lastError;
+                $result['log'][]   = ['error', (int) $loc->id, (string) $loc->name, $this->lastError];
                 break;
             }
 
@@ -197,13 +276,24 @@ class Geocoder
             return ($this->lookup)($params);
         }
 
-        $wait = self::PAUSE - (microtime(true) - self::$lastCall);
+        $state = $this->readState();
+        $now   = microtime(true);
+
+        // Nominatim asked us to back off (HTTP 429 with Retry-After): do not hammer it
+        if ($state['until'] > $now) {
+            $this->lastError = 'HTTP 429, ' . (int) ceil($state['until'] - $now) . ' s';
+
+            return false;
+        }
+
+        $wait = self::PAUSE - ($now - max(self::$lastCall, $state['last']));
 
         if ($wait > 0) {
             usleep((int) ($wait * 1000000));
         }
 
         self::$lastCall = microtime(true);
+        $this->writeState(self::$lastCall, 0.0);
 
         $params += ['format' => 'jsonv2', 'limit' => 1];
 
@@ -217,16 +307,29 @@ class Geocoder
         try {
             $response = HttpFactory::getHttp()->get(self::ENDPOINT . '?' . http_build_query($params), $headers, 15);
         } catch (\Throwable $e) {
+            $this->lastError = trim($e->getMessage()) ?: \get_class($e);
+
             return false;
         }
 
-        if ((int) $response->getStatusCode() !== 200) {
+        $status = (int) $response->getStatusCode();
+
+        if ($status !== 200) {
+            $this->lastError = 'HTTP ' . $status;
+
+            if ($status === 429 || $status === 503) {
+                $retry = method_exists($response, 'getHeaderLine') ? (int) $response->getHeaderLine('Retry-After') : 0;
+                $this->writeState(self::$lastCall, microtime(true) + max(60, min(3600, $retry ?: 300)));
+            }
+
             return false;
         }
 
         $data = json_decode((string) $response->getBody(), true);
 
         if (!\is_array($data)) {
+            $this->lastError = 'Invalid response';
+
             return false;
         }
 
@@ -235,6 +338,32 @@ class Geocoder
         }
 
         return null;
+    }
+
+    /**
+     * @return  array{last: float, until: float}
+     */
+    private function readState(): array
+    {
+        $state = ['last' => 0.0, 'until' => 0.0];
+
+        if ($this->stateFile !== '' && is_file($this->stateFile)) {
+            $data = json_decode((string) @file_get_contents($this->stateFile), true);
+
+            if (\is_array($data)) {
+                $state['last']  = (float) ($data['last'] ?? 0);
+                $state['until'] = (float) ($data['until'] ?? 0);
+            }
+        }
+
+        return $state;
+    }
+
+    private function writeState(float $last, float $until): void
+    {
+        if ($this->stateFile !== '') {
+            @file_put_contents($this->stateFile, json_encode(['last' => $last, 'until' => $until]), LOCK_EX);
+        }
     }
 
     private function save(int $id, ?float $lat, ?float $lon, int $status, string $info): void

@@ -150,10 +150,19 @@ final class LwStoreLocator extends CMSPlugin implements SubscriberInterface, Dat
         $geocoder = new Geocoder(
             $this->getDatabase(),
             trim((string) $component->get('contact_email', '')),
-            strtoupper(trim((string) $component->get('default_country', '')))
+            strtoupper(trim((string) $component->get('default_country', ''))),
+            null,
+            Geocoder::defaultStateFile()
         );
 
         $result = $geocoder->run($limit, (float) $seconds);
+        $reason = '';
+
+        foreach ($result['log'] as $entry) {
+            if ($entry[0] === 'error' && $entry[3] !== '') {
+                $reason = ' (' . $entry[3] . ')';
+            }
+        }
 
         $this->logTask(sprintf(
             'Geocoding: %d processed (%d exact, %d approximate, %d not found), %d still open.%s',
@@ -162,7 +171,7 @@ final class LwStoreLocator extends CMSPlugin implements SubscriberInterface, Dat
             $result['approx'],
             $result['failed'],
             $result['remaining'],
-            $result['aborted'] ? ' Nominatim was not reachable – the rest will be processed on the next run.' : ''
+            $result['aborted'] ? ' Nominatim was not reachable' . $reason . ' – the rest will be processed on the next run.' : ''
         ));
 
         return Status::OK;
